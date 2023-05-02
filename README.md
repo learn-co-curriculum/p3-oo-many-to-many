@@ -66,6 +66,7 @@ class Child:
     def add_parent(self, parent):
         if isinstance(parent, Parent):
             self._parents.append(parent)
+            parent.add_child(self)
         else:
             raise ValueError("Parent must be an instance of the Parent class.")
 
