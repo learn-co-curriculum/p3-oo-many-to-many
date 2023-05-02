@@ -36,9 +36,12 @@ A child can have multiple parents and a parent can have multiple children.
 
 ```py
 class Parent:
-    def __init__(self):
+    def __init__(self, children=None):
         self._children = []
-    
+        if children:
+            for child in children:
+                self.add_child(child)
+
     def add_child(self, child):
         if isinstance(child, Child):
             self._children.append(child)
@@ -52,9 +55,14 @@ class Parent:
 
 ```py
 class Child:
-    def __init__(self, name):
+
+    def __init__(self, name, parents=None):
         self._parents = []
         self.name = name
+        if parents:
+            for parent in parents:
+                self.add_parent(parent)
+
     def add_parent(self, parent):
         if isinstance(parent, Parent):
             self._parents.append(parent)
@@ -89,10 +97,12 @@ In this example, we'll create a many-to-many relationship between two classes `S
 
 ```py
 from datetime import datetime
+
 class Student:
     def __init__(self, name):
         self.name = name
         self._enrollments = []
+        self._courses = []
 
     def enroll(self, course):
         if isinstance(course, Course):
@@ -105,11 +115,17 @@ class Student:
     def get_enrollments(self):
         return self._enrollments.copy()
 
+    def get_courses(self):
+        return self._courses.copy()
+
+    def add_course(self, course):
+        self._courses.append(course)
+
 class Course:
     def __init__(self, title):
-
         self.title = title
         self._enrollments = []
+        self._students = []
 
     def add_enrollment(self, enrollment):
         if isinstance(enrollment, Enrollment):
@@ -120,18 +136,27 @@ class Course:
     def get_enrollments(self):
         return self._enrollments.copy()
 
+    def get_students(self):
+        return self._students.copy()
+
+    def add_student(self, student):
+        self._students.append(student)
 
 class Enrollment:
     def __init__(self, student, course):
         if isinstance(student, Student) and isinstance(course, Course):
             self.student = student
             self.course = course
+            student.add_course(course)
+            course.add_student(student)
             self._enrollment_date = datetime.now()
         else:
             raise TypeError("Invalid types for student and/or course")
 
     def get_enrollment_date(self):
         return self._enrollment_date
+
+
 ```
 
 ```py
