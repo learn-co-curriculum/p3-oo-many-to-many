@@ -41,11 +41,11 @@ class Parent:
         if children:
             for child in children:
                 self.add_child(child)
+                child.add_parent(self)
 
     def add_child(self, child):
         if isinstance(child, Child):
             self._children.append(child)
-            child.add_parent(self)
         else:
             raise ValueError("Child must be an instance of the Child class.")
     
@@ -62,11 +62,11 @@ class Child:
         if parents:
             for parent in parents:
                 self.add_parent(parent)
+                parent.add_child(self)
 
     def add_parent(self, parent):
         if isinstance(parent, Parent):
             self._parents.append(parent)
-            parent.add_child(self)
         else:
             raise ValueError("Parent must be an instance of the Parent class.")
 
