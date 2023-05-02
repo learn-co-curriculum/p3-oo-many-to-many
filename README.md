@@ -23,9 +23,9 @@ is an object-oriented programming language.
 
 ## Introduction
 
-A many-to-many relationship refers to a relationship where multiple instances of one class (Class A) are associated with multiple instances of another class (Class B), and vice versa. In other words, each object of Class A can be related to multiple objects of Class B, and each object of Class B can be related to multiple objects of Class A.
+A many-to-many relationship refers to a relationship where multiple instances of one class (Users) are associated with multiple instances of another class (Websites), and vice versa. In other words, each object of Users can be related to multiple objects of Websites, and each object of Websites can be related to multiple objects of Users.
 
-When working with many-to-many relationships, it is important to consider whether or not to use an intermediary class. An intermediary class is a class that sits between two other classes in a many-to-many relationship and provides additional information about the relationship.
+When working with many-to-many relationships, it is important to consider whether or not to use an intermediary class. An intermediary class is a class that sits between two other classes in a many-to-many relationship and provides additional information about the relationship. It can help us populate and modify both sides of the relationship.
 
 ## Many-to-many without intermediary class
 
@@ -42,6 +42,7 @@ class Parent:
     def add_child(self, child):
         if isinstance(child, Child):
             self._children.append(child)
+            child.add_parent(self)
         else:
             raise ValueError("Child must be an instance of the Child class.")
     
@@ -53,18 +54,15 @@ class Parent:
 class Child:
     def __init__(self, name):
         self._parents = []
-        self._name = name
+        self.name = name
     def add_parent(self, parent):
         if isinstance(parent, Parent):
             self._parents.append(parent)
         else:
             raise ValueError("Parent must be an instance of the Parent class.")
-    
+
     def get_parents(self):
         return self._parents
-    
-    def get_name(self):
-        return self._name
 
 ```
 
@@ -78,7 +76,7 @@ parent1.add_child(child1)
 parent2.add_child(child1)
 child1.add_parent(parent1)
 child1.add_parent(parent2)
-[ print(c.get_name()) for c in parent1.get_children()]
+[ print(c.name) for c in parent1.get_children()]
 ```
 
 This approach can be simpler than using an intermediary class, but it can also be less flexible if additional information needs to be stored about the relationship.
@@ -93,7 +91,7 @@ In this example, we'll create a many-to-many relationship between two classes `S
 from datetime import datetime
 class Student:
     def __init__(self, name):
-        self._name = name
+        self.name = name
         self._enrollments = []
 
     def enroll(self, course):
@@ -109,7 +107,8 @@ class Student:
 
 class Course:
     def __init__(self, title):
-        self._title = title
+
+        self.title = title
         self._enrollments = []
 
     def add_enrollment(self, enrollment):
@@ -121,23 +120,15 @@ class Course:
     def get_enrollments(self):
         return self._enrollments.copy()
 
-    def get_title(self):
-        return self._title
 
 class Enrollment:
     def __init__(self, student, course):
         if isinstance(student, Student) and isinstance(course, Course):
-            self._student = student
-            self._course = course
+            self.student = student
+            self.course = course
             self._enrollment_date = datetime.now()
         else:
             raise TypeError("Invalid types for student and/or course")
-
-    def get_student(self):
-        return self._student
-
-    def get_course(self):
-        return self._course
 
     def get_enrollment_date(self):
         return self._enrollment_date
@@ -149,12 +140,15 @@ course = Course('Math 31')
 
 student.enroll(course)
 print(student.get_enrollments()[0].get_enrollment_date())
+# => 2023-05-02 08:39:57.570467
 print(course.get_enrollments()[0].get_enrollment_date())
-print(student.get_enrollments()[0].get_course().get_title())
+# => 2023-05-02 08:39:57.570467
+print(student.get_enrollments()[0].course.title)
+# => Math 31
 
 ```
 
-Using an intermediary class you can now store the date when a student enrolls in a course as part of the Enrollment object, which is specific to the relationship between the student and the course.
+Using an intermediary class you can now store the date when a student enrolls in a course as part of the Enrollment object, which is specific to the relationship between the student and the course. The tradeoff is that it adds complexity because you need to create and manage additional objects. The advantages is that it makes the code more scalable because if we need to add more attributes or features related to the enrollment process we can easily do so with the `Enrollment` class.
 
 ***
 
