@@ -154,7 +154,13 @@ Using an intermediary class you can now store the date when a student enrolls in
 
 ## Conclusion
 
-In conclusion, implementing many-to-many relationships in Object-Oriented Programming can be achieved with or without an intermediary class. We want to use an intermediary class when we need to store some outside information about the relationship. When deciding whether to use an intermediary class for many-to-many relationships, consider the trade offs of each approach.
+In conclusion, many-to-many relationships are an important aspect of object-oriented programming that enable us to model complex relationships between entities. These relationships can be implemented with or without an intermediary class. The decision to use an intermediary class depends on the specific requirements of the system and the information that needs to be stored about the relationship.
+
+When using an intermediary class, it is possible to store additional information about the relationship that is not directly related to either of the entities involved. This information can include data such as timestamps, ratings, or any other attributes that are relevant to the relationship itself. By utilizing an intermediary class, we can model these relationships in a more robust and flexible way.
+
+However, using an intermediary class can also introduce additional complexity and overhead to the system. This can make the system more difficult to maintain, especially if there are many entities and relationships involved. In some cases, it may be more efficient to implement the many-to-many relationship without an intermediary class, especially if the relationship is simple and straightforward (such as with parents and children).
+
+In summary, many-to-many relationships are a critical aspect of object-oriented programming that enable us to model complex relationships between entities. The use of an intermediary class can provide additional flexibility and robustness, but also introduces additional complexity and overhead. Careful consideration of these trade-offs is essential when deciding how to implement many-to-many relationships in our programs.
 
 ***
 
