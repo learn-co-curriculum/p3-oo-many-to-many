@@ -136,7 +136,7 @@ class Student:
         return [enrollment for enrollment in Enrollment.all if enrollment.student == self]
 
     def courses(self):
-        return [course for course in Course.all if self in course.students()]
+        return [enrollment.course for enrollment in self.enrollments()]
 
 class Course:
 
@@ -150,7 +150,7 @@ class Course:
         return [enrollment for enrollment in Enrollment.all if enrollment.course == self]
 
     def students(self):
-        return [student for student in Student.all if self in student.courses()]
+        return [enrollment.student for enrollment in self.enrollments()]
 
     def enroll_student(self, student):
         Enrollment(student, self)
